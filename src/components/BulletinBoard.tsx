@@ -10,7 +10,7 @@ export interface Post {
   id: string;
   title: string;
   content: string;
-  type: 'event' | 'blog';
+  type: 'event' | 'blog' | 'news';
   isPinned: boolean;
   likes: number;
   comments: Comment[];

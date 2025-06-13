@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,28 +11,55 @@ import { Post } from './BulletinBoard';
 
 interface CreatePostModalProps {
   onClose: () => void;
-  onSubmit: (post: Omit<Post, 'id' | 'likes' | 'comments' | 'createdAt'>) => void;
+  onSubmit: (
+    post: Omit<Post, 'id' | 'likes' | 'comments' | 'createdAt'> | Post
+  ) => void;
+  initialData?: Post;
 }
 
-export const CreatePostModal = ({ onClose, onSubmit }: CreatePostModalProps) => {
+export const CreatePostModal = ({
+  onClose,
+  onSubmit,
+  initialData,
+}: CreatePostModalProps) => {
+  const isEditMode = !!initialData;
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [type, setType] = useState<'event' | 'blog'>('blog');
+  const [type, setType] = useState<'event' | 'blog' | 'news'>('blog');
   const [isPinned, setIsPinned] = useState(false);
   const [author, setAuthor] = useState('Admin');
 
+  // Pre-fill data in edit mode
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setContent(initialData.content);
+      setType(initialData.type);
+      setIsPinned(initialData.isPinned);
+      setAuthor(initialData.author);
+    }
+  }, [initialData]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && content.trim()) {
-      onSubmit({
-        title,
-        content,
-        type,
-        isPinned,
-        author
-      });
-      onClose();
+
+    const postData = {
+      title,
+      content,
+      type,
+      isPinned,
+      author,
+    };
+
+    // If editing, include post ID
+    if (isEditMode && initialData) {
+      onSubmit({ ...initialData, ...postData });
+    } else {
+      onSubmit(postData);
     }
+
+    onClose();
   };
 
   return (
@@ -41,7 +67,9 @@ export const CreatePostModal = ({ onClose, onSubmit }: CreatePostModalProps) => 
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Create New Post</CardTitle>
+            <CardTitle>
+              {isEditMode ? 'Edit Post' : 'Create New Post'}
+            </CardTitle>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="w-4 h-4" />
             </Button>
@@ -74,7 +102,10 @@ export const CreatePostModal = ({ onClose, onSubmit }: CreatePostModalProps) => 
 
             <div className="space-y-2">
               <Label>Post Type</Label>
-              <RadioGroup value={type} onValueChange={(value: 'event' | 'blog') => setType(value)}>
+              <RadioGroup
+                value={type}
+                onValueChange={(value: 'event' | 'blog' | 'news') => setType(value)}
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="blog" id="blog" />
                   <Label htmlFor="blog">Blog Post</Label>
@@ -82,6 +113,10 @@ export const CreatePostModal = ({ onClose, onSubmit }: CreatePostModalProps) => 
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="event" id="event" />
                   <Label htmlFor="event">Event</Label>
+                </div>
+                  <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="news" id="news" />
+                  <Label htmlFor="news">News</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -108,7 +143,7 @@ export const CreatePostModal = ({ onClose, onSubmit }: CreatePostModalProps) => 
 
             <div className="flex gap-2 pt-4">
               <Button type="submit" className="flex-1">
-                Create Post
+                {isEditMode ? 'Update Post' : 'Create Post'}
               </Button>
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
