@@ -83,7 +83,7 @@ const Index = () => {
                   size="lg"
                 >
                   <Lock className="w-6 h-6 mr-3" />
-                  Private Features
+                  Featured Posts
                 </Button>
               </Link>
             </div>

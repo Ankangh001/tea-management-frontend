@@ -20,37 +20,94 @@ const RegisterPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-    const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            // Get CSRF cookie first
-            await axios.get('http://localhost:8000/sanctum/csrf-cookie', {
-                withCredentials: true,
-            });
+  const handleRegister_old = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-            const res = await axios.post("http://localhost:8000/api/register", form, {
-                withCredentials: true, // important!
-            });
+    try {
+      // ✅ Step 1: Get CSRF cookie first
+      await axios.get("/sanctum/csrf-cookie");
 
-            localStorage.setItem("auth_token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
-            toast.success("Account created successfully");
-            navigate("/post");
-        } catch (err: any) {
-            toast.error(
-            err.response?.data?.message || "Registration failed. Try again."
-            );
-        } finally {
-            setLoading(false);
-        }
-    };
+      // ✅ Step 2: Now make the actual registration request
+      const res = await axios.post("/api/register", form);
+
+      localStorage.setItem("auth_token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      toast.success("Account created successfully");
+      navigate("/post");
+    } catch (err: any) {
+      toast.error(
+        err.response?.data?.message || "Registration failed. Try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleRegister_old2 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      axios.defaults.baseURL = "http://localhost:8000";
+      axios.defaults.withCredentials = true; // ✅ send cookies with requests
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+      const token = decodeURIComponent(
+        document.cookie
+          .split('; ')
+          .find(row => row.startsWith('XSRF-TOKEN='))
+          ?.split('=')[1] || ''
+      );
+
+      axios.defaults.headers.common['X-XSRF-TOKEN'] = token;
+
+
+      // Step 1: Get CSRF cookie
+      await axios.get("/sanctum/csrf-cookie");
+
+      // Step 2: Then send register
+      const res = await axios.post("/api/register", form);
+
+      localStorage.setItem("auth_token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      toast.success("Account created successfully");
+      navigate("/post");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    // Send request directly without csrf
+    const res = await axios.post("http://localhost:8000/api/register", form, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    localStorage.setItem("auth_token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    toast.success("Account created successfully");
+    navigate("/post");
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || "Registration failed. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center text-2xl text-blue-700">
+          <CardTitle className="text-center text-2xl font-bold text-blue-700">
             Create an Account
           </CardTitle>
         </CardHeader>

@@ -18,8 +18,8 @@ const Post = () => {
             <h1 className="text-2xl font-bold text-slate-800">Company Bulletin</h1>
             <p className="text-slate-600">Stay updated with our latest news & events</p>
           </div>
-          <AuthStatusButton />
-          {/* <Button
+          {/* <AuthStatusButton /> */}
+          <Button
             onClick={() => setIsAdmin(!isAdmin)}
             variant={isAdmin ? "destructive" : "default"}
             className="flex items-center gap-2"
@@ -35,7 +35,7 @@ const Post = () => {
                 Admin Login
               </>
             )}
-          </Button> */}
+          </Button>
         </div>
       </header>
 

@@ -16,16 +16,16 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8000/api/login", {
-        email,
-        password,
-      });
+      // const response = await axios.post("http://localhost:8000/api/login", {
+      //   email,
+      //   password,
+      // });
 
-      localStorage.setItem("auth_token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // localStorage.setItem("auth_token", response.data.token);
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      toast.success("Logged in successfully");
-      navigate("/post");
+      // toast.success("Logged in successfully");
+      navigate("/");
     } catch (err: any) {
       toast.error(
         err.response?.data?.message || "Invalid credentials or server error"
