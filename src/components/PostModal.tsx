@@ -98,8 +98,10 @@ export const PostModal = ({ post, onClose, onLike, onComment }: PostModalProps) 
                 <div key={comment.id} className="bg-slate-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-slate-800">{comment.author}</span>
-                    <span className="text-sm text-slate-500">
-                      {comment.createdAt.toLocaleDateString()}
+                    <span>
+                      {comment?.createdAt
+                        ? new Date(comment.createdAt).toLocaleDateString()
+                        : 'Unknown date'}
                     </span>
                   </div>
                   <p className="text-slate-700 mb-2">{comment.content}</p>

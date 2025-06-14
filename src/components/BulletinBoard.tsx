@@ -5,6 +5,8 @@ import { PostModal } from './PostModal';
 import { Pin, Calendar, BookOpen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import axios from 'axios';
+import { isLoggedIn, getCurrentUser } from "@/utils/auth";
 
 export interface Post {
   id: string;
@@ -26,69 +28,13 @@ export interface Comment {
   createdAt: Date;
 }
 
-const mockPosts: Post[] = [
-  {
-    id: '1',
-    title: '🎉 Company Annual Event 2024',
-    content: 'Join us for our biggest celebration of the year! Mark your calendars for December 15th. We\'ll have team presentations, awards ceremony, and networking dinner.',
-    type: 'event',
-    isPinned: true,
-    likes: 24,
-    comments: [
-      {
-        id: '1',
-        content: 'Can\'t wait! Will there be live streaming for remote employees?',
-        author: 'Sarah Chen',
-        likes: 5,
-        createdAt: new Date('2024-01-15')
-      }
-    ],
-    createdAt: new Date('2024-01-10'),
-    author: 'Events Team'
-  },
-  {
-    id: '2',
-    title: '📢 New Security Protocols',
-    content: 'Important updates to our security guidelines. All employees must complete the new security training by January 30th.',
-    type: 'blog',
-    isPinned: true,
-    likes: 15,
-    comments: [],
-    createdAt: new Date('2024-01-08'),
-    author: 'IT Security'
-  },
-  {
-    id: '3',
-    title: '🚀 Product Launch Success',
-    content: 'Our latest product exceeded expectations with 150% of projected sales in the first week! Thank you to everyone who made this possible.',
-    type: 'blog',
-    isPinned: false,
-    likes: 43,
-    comments: [
-      {
-        id: '2',
-        content: 'Amazing work team! The marketing campaign was spot on.',
-        author: 'Mike Johnson',
-        likes: 8,
-        createdAt: new Date('2024-01-05')
-      },
-      {
-        id: '3',
-        content: 'Proud to be part of this success story!',
-        author: 'Lisa Wong',
-        likes: 3,
-        createdAt: new Date('2024-01-06')
-      }
-    ],
-    createdAt: new Date('2024-01-05'),
-    author: 'Product Team'
-  }
-];
 
 export const BulletinBoard = () => {
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [filter, setFilter] = useState<'all' | 'event' | 'blog'>('all');
+  const [filter, setFilter] = useState<'all' | 'event' | 'blog' | 'news'>('all');
 
   const pinnedPosts = posts.filter(post => post.isPinned);
   const regularPosts = posts.filter(post => !post.isPinned);
@@ -97,30 +43,107 @@ export const BulletinBoard = () => {
     ? regularPosts 
     : regularPosts.filter(post => post.type === filter);
 
-  const handleLike = (postId: string) => {
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, likes: post.likes + 1 }
-        : post
-    ));
+  const handleLike = async (postId: string) => {
+    if (!isLoggedIn()) {
+      window.location.href = "/login";
+      return;
+    }
+
+    try {
+      await axios.post(
+        `http://localhost:8000/api/posts/${postId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        }
+      );
+
+      setPosts((prev) =>
+        prev.map((post) =>
+          post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        )
+      );
+    } catch (err) {
+      console.error("Failed to like post", err);
+    }
   };
 
-  const handleComment = (postId: string, content: string) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      content,
-      author: 'Current User',
-      likes: 0,
-      createdAt: new Date()
+  const handleComment = async (postId: string, content: string) => {
+    if (!isLoggedIn()) {
+      window.location.href = "/login";
+      return;
+    }
+
+    const user = getCurrentUser();
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/posts/${postId}/comments`,
+        {
+          content,
+          author: user?.name || "Anonymous",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        }
+      );
+
+      const newComment: Comment = {
+        ...response.data,
+        createdAt: new Date(response.data.created_at),
+      };
+
+      setPosts((prev) =>
+        prev.map((post) =>
+          post.id === postId
+            ? { ...post, comments: [...post.comments, newComment] }
+            : post
+        )
+      );
+    } catch (err) {
+      console.error("Failed to add comment", err);
+    }
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/posts");
+        const rawPosts = response.data;
+
+        const postsWithComments = await Promise.all(
+          rawPosts.map(async (post: any) => {
+            const commentsRes = await axios.get(`http://localhost:8000/api/posts/${post.id}/comments`);
+            return {
+              ...post,
+              id: post.id.toString(),
+              type: post.post_type,
+              isPinned: post.is_pinned,
+              createdAt: new Date(post.created_at),
+              likes: post.likes || 0,
+              comments: commentsRes.data || [],
+            };
+          })
+        );
+
+        setPosts(postsWithComments);
+      } catch (err) {
+        console.error("Failed to load posts/comments", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, comments: [...post.comments, newComment] }
-        : post
-    ));
-  };
+    fetchPosts();
+  }, []);
 
+  if (loading) {
+    return <p className="text-center text-slate-500 py-8">Loading posts...</p>;
+  }
   return (
     <div className="space-y-8">
       {/* Filter Tabs */}
@@ -147,6 +170,13 @@ export const BulletinBoard = () => {
         >
           <BookOpen className="w-4 h-4" />
           Blog Posts
+        </Button>
+        <Button
+          variant={filter === 'news' ? 'default' : 'outline'}
+          onClick={() => setFilter('news')}
+          className="flex items-center gap-2"
+        >
+        📰 News
         </Button>
       </div>
 

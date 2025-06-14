@@ -4,6 +4,7 @@ import { BulletinBoard } from '@/components/BulletinBoard';
 import { AdminDashboard } from '@/components/AdminDashboard';
 import { Button } from '@/components/ui/button';
 import { LogIn, LogOut } from 'lucide-react';
+import AuthStatusButton from "@/components/AuthStatusButton";
 
 const Post = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,7 +18,8 @@ const Post = () => {
             <h1 className="text-2xl font-bold text-slate-800">Company Bulletin</h1>
             <p className="text-slate-600">Stay updated with our latest news & events</p>
           </div>
-          <Button
+          <AuthStatusButton />
+          {/* <Button
             onClick={() => setIsAdmin(!isAdmin)}
             variant={isAdmin ? "destructive" : "default"}
             className="flex items-center gap-2"
@@ -33,7 +35,7 @@ const Post = () => {
                 Admin Login
               </>
             )}
-          </Button>
+          </Button> */}
         </div>
       </header>
 
