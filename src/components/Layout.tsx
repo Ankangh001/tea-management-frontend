@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react"; // lucide icons (or replace with your pr
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -77,9 +78,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link
               to="/login"
               className="block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white text-center font-medium px-4 py-2 rounded-xl shadow hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all"
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                setIsAdmin(!isAdmin);
+                setMenuOpen(false)
+              }}
             >
-              Login
+              Admin Login
             </Link>
           </div>
         )}
