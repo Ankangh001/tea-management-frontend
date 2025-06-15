@@ -77,7 +77,7 @@ const Index = () => {
                 )}
               </Button>
 
-              <Link to="/login" className="w-full sm:w-auto">
+              <Link to="/post" className="w-full sm:w-auto">
                 <Button
                   className="w-full bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 text-lg rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105"
                   size="lg"

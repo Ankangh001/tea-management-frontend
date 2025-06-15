@@ -141,18 +141,40 @@ export const AdminDashboard = () => {
     }
   };
 
-  const handleTogglePin = (postId: string) => {
-    setPosts(prev => prev.map(post => {
-      if (post.id === postId) {
-        const pinnedCount = prev.filter(p => p.isPinned).length;
-        if (!post.isPinned && pinnedCount >= 3) {
-          alert('Maximum 3 posts can be pinned at once');
-          return post;
+  const handleTogglePin = async (postId: string) => {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const pinnedCount = posts.filter(p => p.isPinned).length;
+    if (!post.isPinned && pinnedCount >= 3) {
+      alert('Maximum 3 posts can be pinned at once');
+      return;
+    }
+
+    const updatedPost = {
+      title: post.title,
+      content: post.content,
+      post_type: post.type,
+      author: post.author,
+      is_pinned: !post.isPinned
+    };
+
+    try {
+      await axios.put(`http://localhost:8000/api/posts/${postId}`, updatedPost, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`
         }
-        return { ...post, isPinned: !post.isPinned };
-      }
-      return post;
-    }));
+      });
+
+      setPosts(prev =>
+        prev.map(p =>
+          p.id === postId ? { ...p, isPinned: !p.isPinned } : p
+        )
+      );
+    } catch (err) {
+      console.error("Failed to toggle pin", err);
+    }
   };
 
   if (loading) {

@@ -44,10 +44,10 @@ export const BulletinBoard = () => {
     : regularPosts.filter(post => post.type === filter);
 
   const handleLike = async (postId: string) => {
-    if (!isLoggedIn()) {
-      window.location.href = "/login";
-      return;
-    }
+    // if (!isLoggedIn()) {
+    //   window.location.href = "/login";
+    //   return;
+    // }
 
     try {
       await axios.post(
@@ -71,10 +71,10 @@ export const BulletinBoard = () => {
   };
 
   const handleComment = async (postId: string, content: string) => {
-    if (!isLoggedIn()) {
-      window.location.href = "/login";
-      return;
-    }
+    // if (!isLoggedIn()) {
+    //   window.location.href = "/login";
+    //   return;
+    // }
 
     const user = getCurrentUser();
 
@@ -108,6 +108,7 @@ export const BulletinBoard = () => {
       console.error("Failed to add comment", err);
     }
   };
+
 
   useEffect(() => {
     const fetchPosts = async () => {
