@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { PostCard } from './PostCard';
-import { PostModal } from './PostModal';
+import { PostCard } from '../components/PostCard';
+import { PostModal } from '../components/PostModal';
 import { Pin, Calendar, BookOpen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ export interface Comment {
 }
 
 
-export const BulletinBoard = () => {
+const BulletinBoard = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -147,86 +147,92 @@ export const BulletinBoard = () => {
     return <p className="text-center text-slate-500 py-8">Loading posts...</p>;
   }
   return (
-    <div className="space-y-8">
-      {/* Filter Tabs */}
-      <div className="flex gap-2 flex-wrap">
-        <Button
-          variant={filter === 'all' ? 'default' : 'outline'}
-          onClick={() => setFilter('all')}
-          className="flex items-center gap-2"
-        >
-          All Posts
-        </Button>
-        <Button
-          variant={filter === 'event' ? 'default' : 'outline'}
-          onClick={() => setFilter('event')}
-          className="flex items-center gap-2"
-        >
-          <Calendar className="w-4 h-4" />
-          Events
-        </Button>
-        <Button
-          variant={filter === 'blog' ? 'default' : 'outline'}
-          onClick={() => setFilter('blog')}
-          className="flex items-center gap-2"
-        >
-          <BookOpen className="w-4 h-4" />
-          Blog Posts
-        </Button>
-        <Button
-          variant={filter === 'news' ? 'default' : 'outline'}
-          onClick={() => setFilter('news')}
-          className="flex items-center gap-2"
-        >
-        📰 News
-        </Button>
-      </div>
-
-      {/* Pinned Posts */}
-      {pinnedPosts.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Pin className="w-5 h-5 text-blue-600" />
-            <h2 className="text-xl font-semibold text-slate-800">Pinned Posts</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">
+      <main className="container mx-auto px-4 py-8">
+        <div className="space-y-8">
+          {/* Filter Tabs */}
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              variant={filter === 'all' ? 'default' : 'outline'}
+              onClick={() => setFilter('all')}
+              className="flex items-center gap-2"
+            >
+              All Posts
+            </Button>
+            <Button
+              variant={filter === 'event' ? 'default' : 'outline'}
+              onClick={() => setFilter('event')}
+              className="flex items-center gap-2"
+            >
+              <Calendar className="w-4 h-4" />
+              Events
+            </Button>
+            <Button
+              variant={filter === 'blog' ? 'default' : 'outline'}
+              onClick={() => setFilter('blog')}
+              className="flex items-center gap-2"
+            >
+              <BookOpen className="w-4 h-4" />
+              Blog Posts
+            </Button>
+            <Button
+              variant={filter === 'news' ? 'default' : 'outline'}
+              onClick={() => setFilter('news')}
+              className="flex items-center gap-2"
+            >
+            📰 News
+            </Button>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {pinnedPosts.map(post => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onLike={handleLike}
-                onClick={() => setSelectedPost(post)}
-                isPinned
-              />
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* Regular Posts */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-slate-800">Latest Updates</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredPosts.map(post => (
-            <PostCard
-              key={post.id}
-              post={post}
+          {/* Pinned Posts */}
+          {pinnedPosts.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Pin className="w-5 h-5 text-blue-600" />
+                <h2 className="text-xl font-semibold text-slate-800">Pinned Posts</h2>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {pinnedPosts.map(post => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    onLike={handleLike}
+                    onClick={() => setSelectedPost(post)}
+                    isPinned
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Regular Posts */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-slate-800">Latest Updates</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredPosts.map(post => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onLike={handleLike}
+                  onClick={() => setSelectedPost(post)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Post Modal */}
+          {selectedPost && (
+            <PostModal
+              post={selectedPost}
+              onClose={() => setSelectedPost(null)}
               onLike={handleLike}
-              onClick={() => setSelectedPost(post)}
+              onComment={handleComment}
             />
-          ))}
+          )}
         </div>
-      </div>
-
-      {/* Post Modal */}
-      {selectedPost && (
-        <PostModal
-          post={selectedPost}
-          onClose={() => setSelectedPost(null)}
-          onLike={handleLike}
-          onComment={handleComment}
-        />
-      )}
+      </main>
     </div>
   );
 };
+
+export default BulletinBoard;

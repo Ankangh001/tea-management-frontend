@@ -43,10 +43,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               Bulletin
             </Link>
             <Link
-              to="/login"
+              to="/admin-login"
               className="inline-block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all"
             >
-              Login
+              Admin Login
             </Link>
           </nav>
         </div>
@@ -76,12 +76,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               Bulletin
             </Link>
             <Link
-              to="/login"
+              to="/admin-login"
               className="block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white text-center font-medium px-4 py-2 rounded-xl shadow hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all"
-              onClick={() => {
-                setIsAdmin(!isAdmin);
-                setMenuOpen(false)
-              }}
+              onClick={() => setMenuOpen(false)}
             >
               Admin Login
             </Link>

@@ -3,7 +3,7 @@ import { Calendar, BookOpen, Heart, MessageCircle, Pin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Post } from './BulletinBoard';
+import { Post } from '../pages/BulletinBoard';
 
 interface PostCardProps {
   post: Post;
