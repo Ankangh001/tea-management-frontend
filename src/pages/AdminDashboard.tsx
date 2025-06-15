@@ -9,9 +9,6 @@ import { Post } from './BulletinBoard';
 import axios from 'axios';
 import { toast } from '@/components/ui/sonner';
 
-// Set base config
-axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
 
 export const AdminDashboard = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -160,7 +157,7 @@ export const AdminDashboard = () => {
     };
 
     try {
-      await axios.put(`http://localhost:8000/api/posts/${postId}`, updatedPost, {
+      await axios.put(`/api/posts/${postId}`, updatedPost, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`
