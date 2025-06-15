@@ -51,7 +51,7 @@ const BulletinBoard = () => {
     // }
 
     try {
-      await axios.post(
+      await api.post(
         `/api/posts/${postId}/like`,
         {},
         {
@@ -80,7 +80,7 @@ const BulletinBoard = () => {
     const user = getCurrentUser();
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `/api/posts/${postId}/comments`,
         {
           content,
@@ -114,12 +114,12 @@ const BulletinBoard = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("/api/posts");
+        const response = await api.get("/api/posts");
         const rawPosts = response.data;
 
         const postsWithComments = await Promise.all(
           rawPosts.map(async (post: any) => {
-            const commentsRes = await axios.get(`/api/posts/${post.id}/comments`);
+            const commentsRes = await api.get(`/api/posts/${post.id}/comments`);
             return {
               ...post,
               id: post.id.toString(),

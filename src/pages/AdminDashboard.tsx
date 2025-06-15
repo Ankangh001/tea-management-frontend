@@ -8,7 +8,7 @@ import { Post } from './BulletinBoard';
 
 import axios from 'axios';
 import { toast } from '@/components/ui/sonner';
-
+import api from "@/lib/api";
 
 export const AdminDashboard = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -24,8 +24,8 @@ export const AdminDashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      await axios.get('/sanctum/csrf-cookie');
-      const response = await axios.get('/api/posts');
+      await api.get('/sanctum/csrf-cookie');
+      const response = await api.get('/api/posts');
       const fetchedPosts = response.data.map((post: any) => ({
         ...post,
         id: post.id.toString(),
@@ -46,8 +46,8 @@ export const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      await axios.get('/sanctum/csrf-cookie');
-      const response = await axios.get('/api/stats');
+      await api.get('/sanctum/csrf-cookie');
+      const response = await api.get('/api/stats');
       setStats({
         totalPosts: response.data.total_posts,
         totalLikes: response.data.total_likes,
@@ -67,8 +67,8 @@ export const AdminDashboard = () => {
 
   const handleCreatePost = async (newPost: Omit<Post, 'id' | 'likes' | 'comments' | 'createdAt'>) => {
     try {
-      await axios.get('/sanctum/csrf-cookie');
-      const response = await axios.post('/api/posts', {
+      await api.get('/sanctum/csrf-cookie');
+      const response = await api.post('/api/posts', {
         title: newPost.title,
         content: newPost.content,
         post_type: newPost.type,
@@ -95,8 +95,8 @@ export const AdminDashboard = () => {
 
   const handleUpdatePost = async (updatedPost: Post) => {
     try {
-      await axios.get('/sanctum/csrf-cookie');
-      const response = await axios.put(`/api/posts/${updatedPost.id}`, {
+      await api.get('/sanctum/csrf-cookie');
+      const response = await api.put(`/api/posts/${updatedPost.id}`, {
         title: updatedPost.title,
         content: updatedPost.content,
         post_type: updatedPost.type,
@@ -127,8 +127,8 @@ export const AdminDashboard = () => {
     if (!confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.get('/sanctum/csrf-cookie');
-      await axios.delete(`/api/posts/${postId}`);
+      await api.get('/sanctum/csrf-cookie');
+      await api.delete(`/api/posts/${postId}`);
       setPosts(prev => prev.filter(p => p.id !== postId));
       fetchStats();
       toast.success("Post deleted");
@@ -157,7 +157,7 @@ export const AdminDashboard = () => {
     };
 
     try {
-      await axios.put(`/api/posts/${postId}`, updatedPost, {
+      await api.put(`/api/posts/${postId}`, updatedPost, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`
