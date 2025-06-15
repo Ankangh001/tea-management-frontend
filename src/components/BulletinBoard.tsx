@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { isLoggedIn, getCurrentUser } from "@/utils/auth";
+import api from "@/lib/api";
 
 export interface Post {
   id: string;
@@ -51,7 +52,7 @@ export const BulletinBoard = () => {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/posts/${postId}/like`,
+        `/api/posts/${postId}/like`,
         {},
         {
           headers: {
@@ -80,7 +81,7 @@ export const BulletinBoard = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/posts/${postId}/comments`,
+        `/api/posts/${postId}/comments`,
         {
           content,
           author: user?.name || "Anonymous",
@@ -113,12 +114,12 @@ export const BulletinBoard = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/posts");
+        const response = await axios.get("/api/posts");
         const rawPosts = response.data;
 
         const postsWithComments = await Promise.all(
           rawPosts.map(async (post: any) => {
-            const commentsRes = await axios.get(`http://localhost:8000/api/posts/${post.id}/comments`);
+            const commentsRes = await axios.get(`/api/posts/${post.id}/comments`);
             return {
               ...post,
               id: post.id.toString(),
