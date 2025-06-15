@@ -30,6 +30,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/post" className="text-gray-700 hover:text-orange-500 font-medium">
               Bulletin
             </Link>
+            <Link
+                to="/login"
+                className="inline-block bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all"
+            >
+                Login
+            </Link>
           </nav>
         </div>
       </header>
