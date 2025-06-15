@@ -13,11 +13,11 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' &&
     componentTagger(),
-  ].filter(Boolean),
+  ].filter(Boolean),  
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: process.env.VITE_BASE_URL || "/tea-management-frontend",
+  base: process.env.VITE_BASE_URL || "/",
 }));
