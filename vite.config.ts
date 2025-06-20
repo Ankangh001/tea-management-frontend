@@ -19,5 +19,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: process.env.VITE_BASE_URL || "/tea-management-frontend",
+  base: process.env.VITE_BASE_URL || "/",
 }));

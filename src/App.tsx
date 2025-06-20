@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import BulletinBoard from "@/pages/BulletinBoard";
 import About from "./pages/About";
@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import RegisterPage from "@/pages/RegisterPage";
 import Layout from "@/components/Layout";
 import { AdminDashboard } from '@/pages/AdminDashboard';
+import { isLoggedIn, isAdmin } from "@/utils/auth";
 
 const queryClient = new QueryClient();
 
@@ -23,11 +24,16 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Layout><Index /></Layout>} />
           <Route path="/about" element={<Layout><About /></Layout>} />
-          <Route path="/post" element={<Layout><BulletinBoard /></Layout>} />
+          <Route path="/bulletin" element={<Layout><BulletinBoard /></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
-          <Route path="/login" element={<Layout><LoginPage /></Layout>} />
-          <Route path="/dashboard" element={<Layout><AdminDashboard /></Layout>} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
+          <Route path="/dashboard" element={
+            isLoggedIn()
+              ? <Layout>{isAdmin() ? <AdminDashboard /> : <div>User Dashboard Placeholder</div>}</Layout>
+              : <Navigate to="/login" />
+          } />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -74,6 +74,11 @@ export const AdminDashboard = () => {
         post_type: newPost.type,
         author: newPost.author,
         is_pinned: newPost.isPinned
+      }, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+        }
       });
 
       const post: Post = {

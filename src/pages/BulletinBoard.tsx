@@ -45,10 +45,10 @@ const BulletinBoard = () => {
     : regularPosts.filter(post => post.type === filter);
 
   const handleLike = async (postId: string) => {
-    // if (!isLoggedIn()) {
-    //   window.location.href = "/login";
-    //   return;
-    // }
+    if (!isLoggedIn()) {
+      window.location.href = "/login";
+      return;
+    }
 
     try {
       await api.post(
@@ -72,10 +72,10 @@ const BulletinBoard = () => {
   };
 
   const handleComment = async (postId: string, content: string) => {
-    // if (!isLoggedIn()) {
-    //   window.location.href = "/login";
-    //   return;
-    // }
+    if (!isLoggedIn()) {
+      window.location.href = "/login";
+      return;
+    }
 
     const user = getCurrentUser();
 
