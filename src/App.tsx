@@ -10,11 +10,11 @@ import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import RegisterPage from "@/pages/RegisterPage";
 import Layout from "@/components/Layout";
-import { AdminDashboard } from '@/pages/AdminDashboard';
 import { isLoggedIn, isAdmin } from "@/utils/auth";
 import LoginRedirect from "@/components/LoginRedirect";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardWrapper from "@/components/DashboardWrapper";
+import UserManagement from '@/pages/UserManagement';
 
 const queryClient = new QueryClient();
 
@@ -39,7 +39,11 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             }
-          />          
+          />    
+          <Route path="/admin/users" element={
+            isAdmin() ? <Layout><UserManagement /></Layout> : <Navigate to="/login" />
+          } />
+                
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

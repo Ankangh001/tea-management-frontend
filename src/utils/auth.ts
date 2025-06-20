@@ -10,10 +10,10 @@ export function getCurrentUser() {
 
 export function isAdmin(): boolean {
   const user = getCurrentUser();
-  return user?.role === 'super_admin' || user?.role === 'admin';
+  return user?.roles?.some((r: any) => r.name === "admin" || r.name === "super_admin");
 }
 
 export function hasRole(role: string): boolean {
   const user = getCurrentUser();
-  return user?.role === role || user?.roles?.some((r: any) => r.name === role);
+  return user?.roles?.some((r: any) => r.name === role);
 }

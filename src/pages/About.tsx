@@ -1,12 +1,13 @@
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import API from "@/lib/api"; // <-- our axios wrapper
 import { ChevronDown, Users, Globe, Zap, MessageCircle, X, Github, Linkedin, Twitter, MapPin, Network, ShoppingBag, Smartphone } from 'lucide-react';
 
 const About = () => {
   const [selectedTeamMember, setSelectedTeamMember] = useState(null);
   const [messageForm, setMessageForm] = useState({ name: '', email: '', message: '' });
 
-  const teamMembers = [
+  const teamMembers_old = [
     {
       id: 1,
       name: "Anup Pai",
@@ -36,6 +37,30 @@ const About = () => {
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face"
     }
   ];
+
+  interface TeamMember {
+    id: number;
+    name: string;
+    email: string;
+    image: string;
+    role: string;
+    bio: string;
+  }
+
+  const [teamMembers, setTeamMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await API.get('/api/team-members');
+        setTeamMembers(response.data);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
   const techStack = [
     { name: "React", icon: "⚛️" },
@@ -207,16 +232,14 @@ const About = () => {
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-white/50">
                   <div className="text-center">
                     <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-pink-200 group-hover:ring-purple-300 transition-all">
-                      <img 
-                        src={member.image} 
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                     </div>
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-1">{member.name}</h3>
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-1">
+                      {member.name}
+                    </h3>
                     <p className="text-pink-500 font-medium mb-3">{member.role}</p>
-                    <p className="text-gray-600 text-sm mb-4 leading-relaxed">{member.description}</p>
-                    <button 
+                    <p className="text-gray-600 text-sm mb-4 leading-relaxed">{member.bio}</p>
+                    <button
                       onClick={() => setSelectedTeamMember(member)}
                       className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group-hover:scale-105"
                     >

@@ -10,7 +10,7 @@ import api from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 
 
-export const AdminDashboard = () => {
+export const TeamMemberDashboard = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Post[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -188,84 +188,7 @@ export const AdminDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-800">Admin Dashboard</h2>
-              <p className="text-slate-600">Manage your bulletin board content</p>
-            </div>
-            <div className='flex items-center justify-between gap-2'>
-              <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                Create Post
-              </Button>
-              <Button
-                onClick={() => navigate("/admin/users")}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
-              >
-                Manage Users
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-blue-600">{stats.totalPosts}</div><div className="text-sm text-slate-600">Total Posts</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-red-500">{stats.totalLikes}</div><div className="text-sm text-slate-600">Total Likes</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-green-600">{stats.totalComments}</div><div className="text-sm text-slate-600">Total Comments</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-purple-600">{stats.totalViews}</div><div className="text-sm text-slate-600">Total Views</div></CardContent></Card>
-          </div>
-
-          <Card>
-            <CardHeader><CardTitle>Manage Posts</CardTitle></CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {posts.length === 0 ? (
-                  <p className="text-center text-slate-500">No posts yet. Create your first one!</p>
-                ) : (
-                  posts.map(post => (
-                    <div key={post.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium text-slate-800">{post.title}</h3>
-                          <Badge
-                            variant="outline"
-                            className={
-                              post.type === 'news'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : post.type === 'blog'
-                                  ? 'bg-blue-100 text-blue-800'
-                                  : 'border border-gray-300 text-gray-800 bg-transparent'
-                            }
-                          >
-                            {post.type}
-                          </Badge>
-                          {post.isPinned && <Pin className="w-4 h-4 text-blue-600" fill="currentColor" />}
-                        </div>
-                        <p className="text-sm text-slate-600 line-clamp-1">{post.content}</p>
-                        <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
-                          <span className="flex items-center gap-1"><Heart className="w-4 h-4" />{post.likes}</span>
-                          <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{post.comments.length}</span>
-                          <span>By {post.author}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} ><Reply className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}><Pin className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => setEditingPost(post)}><Edit className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeletePost(post.id)}><Trash2 className="w-4 h-4" /></Button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {showCreateModal && !editingPost && (
-            <CreatePostModal onClose={() => setShowCreateModal(false)} onSubmit={handleCreatePost} />
-          )}
-          {editingPost && (
-            <CreatePostModal onClose={() => setEditingPost(null)} onSubmit={handleUpdatePost} initialData={editingPost} />
-          )}
+          TEAM MEMBER DASHBOARD
         </div>
       </main>
     </div>

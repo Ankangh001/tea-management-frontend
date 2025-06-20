@@ -42,18 +42,6 @@ const LoginPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (isLoggedIn()) {
-  //     const user = getCurrentUser();
-  //     const role = user?.roles?.[0]?.name || user?.role;
-
-  //     if (role === "admin" || role === "super_admin") {
-  //       navigate("/dashboard");
-  //     } else {
-  //       navigate("/bulletin"); // or "/bulletin" if that’s the exact route
-  //     }
-  //   }
-  // }, []);
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 p-4">
       <Card className="w-full max-w-md shadow-xl">
