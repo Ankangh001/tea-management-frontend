@@ -42,22 +42,28 @@ const LoginPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (isLoggedIn()) {
-      const user = getCurrentUser();
-      const role = user?.roles?.[0]?.name || user?.role;
+  // useEffect(() => {
+  //   if (isLoggedIn()) {
+  //     const user = getCurrentUser();
+  //     const role = user?.roles?.[0]?.name || user?.role;
 
-      if (role === "admin" || role === "super_admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/bulletin"); // or "/bulletin" if that’s the exact route
-      }
-    }
-  }, []);
+  //     if (role === "admin" || role === "super_admin") {
+  //       navigate("/dashboard");
+  //     } else {
+  //       navigate("/bulletin"); // or "/bulletin" if that’s the exact route
+  //     }
+  //   }
+  // }, []);
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-orange-50 via-white to-purple-50 p-4">
       <Card className="w-full max-w-md shadow-xl">
-        <CardHeader>
+        <CardHeader className="text-center">
+          {/* Logo Section */}
+          <img 
+            src="/lovable-uploads/c4069bf7-facd-489e-9685-a7accf3eca49.png" 
+            alt="eSamudaay Logo" 
+            className="h-10 md:h-10 mx-auto mb-8 animate-scale-in w-50"
+          />
           <CardTitle className="text-center text-2xl font-bold text-grayue-700 hover:text-orange-500">
             Login to Your Account
           </CardTitle>

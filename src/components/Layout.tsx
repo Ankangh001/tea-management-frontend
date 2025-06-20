@@ -47,7 +47,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-orange-500">Team Manager</h1>
+          {/* <h1 className="text-2xl font-bold text-orange-500">Team Manager</h1> */}
+          <img 
+            src="/lovable-uploads/c4069bf7-facd-489e-9685-a7accf3eca49.png" 
+            alt="eSamudaay Logo" 
+            className="h-10 md:h-10 animate-scale-in w-auto"
+          />
 
           {/* Hamburger (Mobile) */}
           <div className="md:hidden">

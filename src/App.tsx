@@ -12,6 +12,9 @@ import RegisterPage from "@/pages/RegisterPage";
 import Layout from "@/components/Layout";
 import { AdminDashboard } from '@/pages/AdminDashboard';
 import { isLoggedIn, isAdmin } from "@/utils/auth";
+import LoginRedirect from "@/components/LoginRedirect";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import DashboardWrapper from "@/components/DashboardWrapper";
 
 const queryClient = new QueryClient();
 
@@ -26,14 +29,17 @@ const App = () => (
           <Route path="/about" element={<Layout><About /></Layout>} />
           <Route path="/bulletin" element={<Layout><BulletinBoard /></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginRedirect />} />
           <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
-          <Route path="/dashboard" element={
-            isLoggedIn()
-              ? <Layout>{isAdmin() ? <AdminDashboard /> : <div>User Dashboard Placeholder</div>}</Layout>
-              : <Navigate to="/login" />
-          } />
-          
+          <Route path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <DashboardWrapper />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
