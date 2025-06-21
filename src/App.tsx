@@ -6,9 +6,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import BulletinBoard from "@/pages/BulletinBoard";
 import About from "./pages/About";
-import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import RegisterPage from "@/pages/RegisterPage";
+import UserProfile from "@/pages/UserProfile";
 import Layout from "@/components/Layout";
 import { isLoggedIn, isAdmin } from "@/utils/auth";
 import LoginRedirect from "@/components/LoginRedirect";
@@ -31,6 +31,7 @@ const App = () => (
           <Route path="*" element={<Layout><NotFound /></Layout>} />
           <Route path="/login" element={<LoginRedirect />} />
           <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
+          <Route path="/user/profile" element={<Layout><UserProfile /></Layout>} />
           <Route path="/dashboard"
             element={
               <ProtectedRoute>

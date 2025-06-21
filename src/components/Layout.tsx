@@ -95,7 +95,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 </button>
                 <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium">
                   {userName}
-                  {userRole && <p className="ml-2 text-sm text-gray-500">({userRole})</p>}
+                  {userRole && <p className="ml-2 text-sm text-gray-500">({userRole == 'team_viewer' ? 'Team Member' : ''})</p>}
                 </Link>
               </>
             ) : (
@@ -118,7 +118,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {isAuthenticated && userName && (
               <div className="text-gray-700 font-medium">
                 {userName}
-                {userRole && <p className="text-sm text-gray-500">({userRole})</p>}
+                {userRole && <p className="text-sm text-gray-500">({userRole == 'team_viewer' ? 'Team Member' : ''})</p>}
               </div>
             )}
 

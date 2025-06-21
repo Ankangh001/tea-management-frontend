@@ -2,42 +2,15 @@
 import { useState, useEffect } from 'react';
 import API from "@/lib/api"; // <-- our axios wrapper
 import { ChevronDown, Users, Globe, Zap, MessageCircle, X, Github, Linkedin, Twitter, MapPin, Network, ShoppingBag, Smartphone } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth'; // If you already created a custom hook for auth
+import { useNavigate } from 'react-router-dom';
+import { toast } from "@/components/ui/sonner";
 
 const About = () => {
+  const navigate = useNavigate();
+
   const [selectedTeamMember, setSelectedTeamMember] = useState(null);
   const [messageForm, setMessageForm] = useState({ name: '', email: '', message: '' });
-
-  const teamMembers_old = [
-    {
-      id: 1,
-      name: "Anup Pai",
-      role: "Founder",
-      description: "Anup is a visionary entrepreneur and the driving force behind eSamudaay. With deep expertise in digital infrastructure, Anup leads the mission to enable decentralized local commerce ecosystems across India.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face"
-    },
-    {
-      id: 2,
-      name: "Ritika Sharma",
-      role: "Chief Operations Officer",
-      description: "Ritika is passionate about operational efficiency and local empowerment. She works with community partners and sellers to ensure a smooth onboarding experience and impactful engagement.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face"
-    },
-    {
-      id: 3,
-      name: "Mohammed Irfan",
-      role: "Tech Lead",
-      description: "Irfan is the architect behind our tech engine. With years of experience in scalable platforms, he ensures our technology is robust, secure, and aligned with the needs of small enterprises.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face"
-    },
-    {
-      id: 4,
-      name: "Sonal Mehta",
-      role: "Community Manager",
-      description: "Sonal builds and nurtures relationships with grassroots communities, helping them adopt digital tools with ease. She's the heart of our user engagement and feedback loop.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face"
-    }
-  ];
-
   interface TeamMember {
     id: number;
     name: string;
@@ -73,11 +46,32 @@ const About = () => {
     { name: "Analytics", icon: "📊" }
   ];
 
-  const handleMessageSubmit = (e) => {
+  const { user } = useAuth(); // ✅ gets user from localStorage
+  useEffect(() => {
+    if (user) {
+      setMessageForm((prev) => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+      }));
+    }
+  }, [user]);
+
+  const handleMessageSubmit = async (e) => {
     e.preventDefault();
-    console.log('Message sent to:', selectedTeamMember.name, messageForm);
-    setMessageForm({ name: '', email: '', message: '' });
-    setSelectedTeamMember(null);
+    try {
+      await API.post('/api/messages', {
+        sender_id: user?.id,
+        receiver_id: selectedTeamMember.id,
+        subject: `Message to ${selectedTeamMember.name}`,
+        content: messageForm.message,
+      });
+      toast.success("Message sent successfully");
+      setMessageForm({ name: '', email: '', message: '' });
+      setSelectedTeamMember(null);
+    } catch (err) {
+      toast.error("Failed to send message");
+    }
   };
 
   const scrollToSection = (sectionId) => {
@@ -232,7 +226,7 @@ const About = () => {
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-white/50">
                   <div className="text-center">
                     <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-pink-200 group-hover:ring-purple-300 transition-all">
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={import.meta.env.VITE_API_BASE_URL+member.image} alt={member.name} className="w-full h-full object-cover" />
                     </div>
                     <h3 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-1">
                       {member.name}
@@ -240,7 +234,13 @@ const About = () => {
                     <p className="text-pink-500 font-medium mb-3">{member.role}</p>
                     <p className="text-gray-600 text-sm mb-4 leading-relaxed">{member.bio}</p>
                     <button
-                      onClick={() => setSelectedTeamMember(member)}
+                      onClick={() => {
+                        if (!user) {
+                          navigate('/login');
+                        } else {
+                          setSelectedTeamMember(member);
+                        }
+                      }}
                       className="w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group-hover:scale-105"
                     >
                       <MessageCircle className="w-4 h-4" />
