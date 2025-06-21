@@ -7,7 +7,7 @@ import { CreatePostModal } from '../components/CreatePostModal';
 import { Post } from './BulletinBoard';
 import { toast } from '@/components/ui/sonner';
 import api from "@/lib/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 export const AdminDashboard = () => {
@@ -198,12 +198,11 @@ export const AdminDashboard = () => {
                 <Plus className="w-4 h-4" />
                 Create Post
               </Button>
-              <Button
-                onClick={() => navigate("/admin/users")}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
-              >
-                Manage Users
-              </Button>
+              <Link to="/admin/users">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+                  Manage Users
+                </Button>
+              </Link>
             </div>
           </div>
 
