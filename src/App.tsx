@@ -15,6 +15,8 @@ import LoginRedirect from "@/components/LoginRedirect";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashboardWrapper from "@/components/DashboardWrapper";
 import UserManagement from '@/pages/UserManagement';
+import { CreatePostPage } from "@/pages/CreatePostPage";
+import PostDetailPage from "@/pages/PostDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +46,9 @@ const App = () => (
           <Route path="/admin/users" element={
             isAdmin() ? <Layout><UserManagement /></Layout> : <Navigate to="/login" />
           } />
-                
+          <Route path="/admin/create-post" element={<Layout><CreatePostPage /></Layout>} />  
+          <Route path="/posts/:id" element={<Layout><PostDetailPage /></Layout>} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

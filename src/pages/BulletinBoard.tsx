@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 import { PostCard } from '../components/PostCard';
 import { PostModal } from '../components/PostModal';
 import { Pin, Calendar, BookOpen } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import axios from 'axios';
 import { isLoggedIn, getCurrentUser } from "@/utils/auth";
 import api from "@/lib/api";
 
@@ -13,12 +11,15 @@ export interface Post {
   id: string;
   title: string;
   content: string;
-  type: 'event' | 'blog' | 'news';
-  isPinned: boolean;
-  likes: number;
-  comments: Comment[];
-  createdAt: Date;
+  post_type: string;
   author: string;
+  isPinned: boolean;
+  type: string;
+  createdAt: Date;
+  likes: number;
+  image?: string;      // actual image file path
+  image_url?: string;  // this is appended by Laravel and used for display
+  comments: Comment[];
 }
 
 export interface Comment {

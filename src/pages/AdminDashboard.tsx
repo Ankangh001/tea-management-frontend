@@ -194,7 +194,7 @@ export const AdminDashboard = () => {
               <p className="text-slate-600">Manage your bulletin board content</p>
             </div>
             <div className='flex items-center justify-between gap-2'>
-              <Button onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
+              <Button onClick={() => navigate("/admin/create-post")} className="flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Create Post
               </Button>
@@ -224,6 +224,7 @@ export const AdminDashboard = () => {
                     <div key={post.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
+                          <img src={post.image_url ? post.image_url : '/placeholder.webp'} alt={post.title} className="w-10 h-10 rounded-full object-cover" />
                           <h3 className="font-medium text-slate-800">{post.title}</h3>
                           <Badge
                             variant="outline"
@@ -239,7 +240,9 @@ export const AdminDashboard = () => {
                           </Badge>
                           {post.isPinned && <Pin className="w-4 h-4 text-blue-600" fill="currentColor" />}
                         </div>
-                        <p className="text-sm text-slate-600 line-clamp-1">{post.content}</p>
+                        <p className="text-sm text-slate-600 line-clamp-1"
+                          dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
                         <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
                           <span className="flex items-center gap-1"><Heart className="w-4 h-4" />{post.likes}</span>
                           <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{post.comments.length}</span>
