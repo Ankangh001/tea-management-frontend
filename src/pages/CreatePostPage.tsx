@@ -75,6 +75,7 @@ export const CreatePostPage = () => {
         
         <select name="type" value={form.type} onChange={handleChange} className="w-full border rounded px-2 py-1">
           <option value="blog">Blog</option>
+          <option value="event">Event</option>
           <option value="news">News</option>
         </select>
 

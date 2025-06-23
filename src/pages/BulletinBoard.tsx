@@ -20,6 +20,7 @@ export interface Post {
   image?: string;      // actual image file path
   image_url?: string;  // this is appended by Laravel and used for display
   comments: Comment[];
+  liked_by?: string[]; // array of user names who liked
 }
 
 export interface Comment {
