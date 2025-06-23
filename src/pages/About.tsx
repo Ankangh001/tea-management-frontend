@@ -226,7 +226,7 @@ const About = () => {
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-white/50">
                   <div className="text-center">
                     <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-pink-200 group-hover:ring-purple-300 transition-all">
-                      <img src={member.image ? import.meta.env.VITE_API_BASE_URL+member.image : '/placeholder.webp'} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={member.image_url ? member.image_url : '/placeholder.webp'} alt={member.name} className="w-full h-full object-cover" />
                     </div>
                     <h3 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent mb-1">
                       {member.name}
