@@ -27,15 +27,20 @@ export const AdminDashboard = () => {
     try {
       await api.get('/sanctum/csrf-cookie');
       const response = await api.get('/api/posts');
-      const fetchedPosts = response.data.map((post: any) => ({
-        ...post,
-        id: post.id.toString(),
-        type: post.post_type,
-        isPinned: post.is_pinned,
-        createdAt: new Date(post.created_at),
-        likes: 0,
-        comments: []
-      }));
+      const fetchedPosts = await Promise.all(
+        response.data.map(async (post: any) => {
+          const commentsRes = await api.get(`/api/posts/${post.id}/comments`);
+          return {
+            ...post,
+            id: post.id.toString(),
+            type: post.post_type,
+            isPinned: post.is_pinned,
+            createdAt: new Date(post.created_at),
+            likes: post.likes || 0,
+            comments: commentsRes.data || [],
+          };
+        })
+      );
       setPosts(fetchedPosts);
     } catch (error) {
       console.error("Failed to fetch posts", error);
@@ -247,13 +252,26 @@ export const AdminDashboard = () => {
                           <span className="flex items-center gap-1"><Heart className="w-4 h-4" />{post.likes}</span>
                           <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{post.comments.length}</span>
                           <span>By {post.author}</span>
+                          <Link to={`/posts/${post.id}`}>
+                            <Button variant="ghost" size="sm" className="text-green-600 btn-sm bg-green-50 hover:bg-green-100 border-green-200">
+                              View Post
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} ><Reply className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}><Pin className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => setEditingPost(post)}><Edit className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeletePost(post.id)}><Trash2 className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} >
+                          <Reply className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}>
+                          <Pin className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => setEditingPost(post)}>
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeletePost(post.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   ))

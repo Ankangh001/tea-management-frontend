@@ -87,7 +87,7 @@ export default function PostDetailPage() {
   const hasCommented = post.comments.some((c) => c.author === currentUser?.name);
 
   return (
-    <div className="bg-slate-50 min-h-screen pt-16">
+    <div className="bg-slate-50 min-h-screen pt-16 mt-[80px]">
       {/* Full-width image */}
       {post.image_url && (
         <div className="w-full h-64 bg-cover bg-center" style={{ backgroundImage: `url(${post.image_url})` }} />
@@ -142,7 +142,6 @@ export default function PostDetailPage() {
                   </Button>
                 </div>
               )}
-
               {comment.reply && (
                 <div className="mt-3 ml-4 p-3 border-l-4 border-blue-300 bg-blue-50 rounded">
                   <p className="text-slate-700">{comment.reply}</p>
