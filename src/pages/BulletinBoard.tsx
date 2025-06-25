@@ -21,6 +21,7 @@ export interface Post {
   image_url?: string;  // this is appended by Laravel and used for display
   comments: Comment[];
   liked_by?: string[]; // array of user names who liked
+  reply?: string; // 👈 Add this line
 }
 
 export interface Comment {
