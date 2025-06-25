@@ -44,7 +44,7 @@ export default function UserProfile() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit_old = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = new FormData();
     data.append("name", formData.name);
@@ -56,6 +56,31 @@ export default function UserProfile() {
     try {
       await API.post("/api/user/update-profile", data);
       toast.success("Profile updated successfully!");
+    } catch (err) {
+      toast.error("Failed to update profile");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("bio", formData.bio);
+    if (formData.image) {
+      data.append("image", formData.image);
+    }
+
+    try {
+      const response = await API.post("/api/user/update-profile", data);
+
+      // ✅ 1. Update localStorage with the new user info
+      const updatedUser = response.data.user ?? response.data; // depends on your API structure
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      toast.success("Profile updated successfully!");
+
+      // ✅ 2. Reload the page (or better: refresh layout context)
+      window.location.reload(); // simple solution to force re-read user data
     } catch (err) {
       toast.error("Failed to update profile");
     }
