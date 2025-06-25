@@ -247,10 +247,10 @@ export const AdminDashboard = () => {
                   <p className="text-center text-slate-500">No posts yet. Create your first one!</p>
                 ) : (
                   posts.map(post => (
-                    <div key={post.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                    <div key={post.id} className="flex shadow-md items-center justify-between p-4 bg-slate-50 rounded-lg">
+                      <img src={post.image ? post.image : '/placeholder.webp'} alt={post.title} className="w-20 h-20 rounded object-cover mr-4" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <img src={post.image_url ? post.image_url : '/placeholder.webp'} alt={post.title} className="w-10 h-10 rounded-full object-cover" />
                           <h3 className="font-medium text-slate-800">{post.title}</h3>
                           <Badge
                             variant="outline"

@@ -91,12 +91,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             {isAuthenticated ? (
               <>
-                <button
-                  onClick={handleLogout}
-                  className="inline-block bg-red-500 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-red-600 transition-all"
-                >
-                  Logout
-                </button>
                 <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium flex items-center space-x-2">
                   <img
                     // src={import.meta.env.VITE_API_BASE_URL+formData.preview}
@@ -106,6 +100,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   />
                   <div className="text-sm text-gray-500">{userName}</div>
                 </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className="inline-block bg-red-500 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-red-600 transition-all"
+                >
+                  Logout
+                </button>
               </>
             ) : (
               <Link to="/login"
