@@ -8,7 +8,7 @@ import { Post } from './BulletinBoard';
 import { toast } from '@/components/ui/sonner';
 import api from "@/lib/api";
 import { useNavigate, Link } from "react-router-dom";
-
+import { ReplyModal } from '../components/ReplyModal';
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ export const AdminDashboard = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  const [replyPost, setReplyPost] = useState<Post | null>(null);
   const [stats, setStats] = useState({
     totalPosts: 0,
     totalLikes: 0,
@@ -191,6 +192,26 @@ export const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">
+      {replyPost && (
+        <ReplyModal
+          post={replyPost}
+          onClose={() => setReplyPost(null)}
+          onReply={(commentId: string, replyText: string) => {
+            setPosts(prev =>
+              prev.map(post =>
+                post.id === replyPost?.id
+                  ? {
+                      ...post,
+                      comments: post.comments.map(c =>
+                        c.id === commentId ? { ...c, reply: replyText } : c
+                      ),
+                    }
+                  : post
+              )
+            );
+          }}
+        />
+      )}
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -260,7 +281,7 @@ export const AdminDashboard = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} >
+                        <Button variant="ghost" size="sm" onClick={() => setReplyPost(post)} >
                           <Reply className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}>

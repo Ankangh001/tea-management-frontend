@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "@/lib/api"; // <-- our axios wrapper
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,11 +47,13 @@ const LoginPage = () => {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           {/* Logo Section */}
+          <Link to="/">
           <img 
             src="/lovable-uploads/c4069bf7-facd-489e-9685-a7accf3eca49.png" 
             alt="eSamudaay Logo" 
             className="h-10 md:h-10 mx-auto mb-8 animate-scale-in w-50"
           />
+          </Link>
           <CardTitle className="text-center text-2xl font-bold text-grayue-700 hover:text-orange-500">
             Login to Your Account
           </CardTitle>

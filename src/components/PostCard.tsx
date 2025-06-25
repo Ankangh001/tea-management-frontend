@@ -26,6 +26,7 @@ export const PostCard = ({ post, onLike, onClick, isPinned }: PostCardProps) => 
         onClick={onClick}
       >
         <CardHeader className="pb-3">
+          <img src={post.image_url ? post.image_url : '/placeholder.webp'} alt={post.title} className="w-100 h-[150px] rounded object-cover" />
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-1">
               <TypeIcon className="w-4 h-4 text-slate-600" />
