@@ -73,7 +73,8 @@ export default function UserProfile() {
               <div className="mb-4">
               <p className="text-sm text-gray-500 mb-1">Preview</p>
               <img
-                  src={import.meta.env.VITE_API_BASE_URL+formData.preview}
+                  // src={import.meta.env.VITE_API_BASE_URL+formData.preview}
+                  src={formData.preview}
                   alt="Preview"
                   className="w-24 h-24 mx-auto object-cover rounded-full border border-gray-300"
               />

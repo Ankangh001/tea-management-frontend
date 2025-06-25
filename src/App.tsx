@@ -17,6 +17,7 @@ import DashboardWrapper from "@/components/DashboardWrapper";
 import UserManagement from '@/pages/UserManagement';
 import { CreatePostPage } from "@/pages/CreatePostPage";
 import PostDetailPage from "@/pages/PostDetailPage";
+import {EditPostPage} from "@/pages/EditPostPage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
           } />
           <Route path="/admin/create-post" element={<Layout><CreatePostPage /></Layout>} />  
           <Route path="/posts/:id" element={<Layout><PostDetailPage /></Layout>} />
+          <Route path="/admin/edit-post/:id" element={<Layout><EditPostPage /></Layout>} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

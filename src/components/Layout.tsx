@@ -8,6 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+  const [userProfileImage, setUserProfileImage] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [hasAnyRole, setHasAnyRole] = useState(false);
 
@@ -25,11 +26,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       if (auth) {
         const user = getCurrentUser();
+        console.log("Current User:", user);
         setUserName(user?.name || "Guest");
+        setUserProfileImage(user?.image || null);
         setUserRole(getPrimaryRole(user));
         setHasAnyRole(user?.roles?.length > 0);
       } else {
         setUserName(null);
+        setUserProfileImage(null);
         setUserRole(null);
         setHasAnyRole(false);
       }
@@ -93,9 +97,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 >
                   Logout
                 </button>
-                <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium">
-                  {userName}
-                  {/* {userRole && <p className="ml-2 text-sm text-gray-500">({userRole == 'team_viewer' ? 'Team Member' : ''})</p>} */}
+                <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium flex items-center space-x-2">
+                  <img
+                    // src={import.meta.env.VITE_API_BASE_URL+formData.preview}
+                    src={userProfileImage}
+                    alt="Preview"
+                    className="w-10 h-10 mx-auto object-cover rounded-full border border-gray-300"
+                  />
+                  <div className="text-sm text-gray-500">{userName}</div>
                 </Link>
               </>
             ) : (

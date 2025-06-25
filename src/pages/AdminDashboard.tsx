@@ -287,7 +287,7 @@ export const AdminDashboard = () => {
                         <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}>
                           <Pin className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => setEditingPost(post)}>
+                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => navigate(`/admin/edit-post/${post.id}`)}>
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeletePost(post.id)}>

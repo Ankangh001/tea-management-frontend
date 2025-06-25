@@ -88,7 +88,7 @@ export default function PostDetailPage() {
 
   return (
     <div className="bg-slate-50 min-h-screen mt-[80px]">
-      <div className="w-full h-[300px] bg-cover bg-center" style={{ backgroundImage: `url(${post.image_url ? post.image_url : '/placeholder.webp'})` }} />
+      <div className="w-full h-[300px] bg-cover bg-center" style={{ backgroundImage: `url(${post.image ? post.image : '/placeholder.webp'})` }} />
       <div className="max-w-4xl mx-auto bg-white rounded shadow -mt-20 p-6 relative z-10">
         <h1 className="text-3xl font-bold text-slate-800 mb-2">{post.title}</h1>
         <p className="text-sm text-slate-500 mb-4">
