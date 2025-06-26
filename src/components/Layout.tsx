@@ -126,10 +126,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/bulletin" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>Bulletin</Link>
 
             {isAuthenticated && userName && (
-              <div className="text-gray-700 font-medium">
-                {userName}
-                {/* {userRole && <p className="text-sm text-gray-500">({userRole == 'team_viewer' ? 'Team Member' : ''})</p>} */}
-              </div>
+                <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium flex items-center space-x-2">
+                  <img
+                    // src={import.meta.env.VITE_API_BASE_URL+formData.preview}
+                    src={userProfileImage}
+                    alt="Preview"
+                    className="w-10 h-10 m-0 object-cover rounded-full border border-gray-300"
+                  />
+                  <div className="text-sm text-gray-500">{userName}</div>
+                </Link>
             )}
 
             {isAuthenticated && hasAnyRole && (
