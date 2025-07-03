@@ -45,7 +45,9 @@ const App = () => (
             }
           />    
           <Route path="/admin/users" element={
-            isAdmin() ? <Layout><UserManagement /></Layout> : <Navigate to="/login" />
+            <ProtectedRoute adminOnly>
+              <Layout><UserManagement /></Layout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/create-post" element={<Layout><CreatePostPage /></Layout>} />  
           <Route path="/posts/:id" element={<Layout><PostDetailPage /></Layout>} />

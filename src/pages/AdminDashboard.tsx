@@ -219,12 +219,15 @@ export const AdminDashboard = () => {
               <h2 className="text-2xl font-bold text-slate-800">Admin Dashboard</h2>
               <p className="text-slate-600">Manage your bulletin board content</p>
             </div>
-            <div className='flex items-center justify-between gap-2'>
-              <Button onClick={() => navigate("/admin/create-post")} className="flex items-center gap-2">
+            <div className="flex flex-wrap justify-end gap-2 sm:flex-nowrap">
+              <Button
+                onClick={() => navigate("/admin/create-post")}
+                className="flex items-center gap-2 whitespace-nowrap"
+              >
                 <Plus className="w-4 h-4" />
                 Create Post
               </Button>
-              <Link to="/admin/users">
+              <Link to="/admin/users" className="whitespace-nowrap">
                 <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
                   Manage Users
                 </Button>
@@ -247,50 +250,74 @@ export const AdminDashboard = () => {
                   <p className="text-center text-slate-500">No posts yet. Create your first one!</p>
                 ) : (
                   posts.map(post => (
-                    <div key={post.id} className="flex shadow-md items-center justify-between p-4 bg-slate-50 rounded-lg">
-                      <img src={post.image ? post.image : '/placeholder.webp'} alt={post.title} className="w-20 h-20 rounded object-cover mr-4" />
-                      <div className="flex-1">
+                    <div key={post.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-50 rounded-lg gap-4">
+                      <img
+                        src={post.image ? post.image : '/placeholder.webp'}
+                        alt={post.title}
+                        className="w-20 h-20 rounded object-cover"
+                      />
+
+                      <div className="flex-1 w-full">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-medium text-slate-800">{post.title}</h3>
                           <Badge
                             variant="outline"
-                            className={
-                              post.type === 'news'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : post.type === 'blog'
-                                  ? 'bg-blue-100 text-blue-800'
-                                  : 'border border-gray-300 text-gray-800 bg-transparent'
-                            }
+                            className={post.type === 'news'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : post.type === 'blog'
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'border border-gray-300 text-gray-800 bg-transparent'}
                           >
                             {post.type}
                           </Badge>
                           {post.isPinned && <Pin className="w-4 h-4 text-blue-600" fill="currentColor" />}
                         </div>
-                        <p className="text-sm text-slate-600 line-clamp-1"
+                        <p
+                          className="text-sm text-slate-600 line-clamp-1"
                           dangerouslySetInnerHTML={{ __html: post.content }}
                         />
-                        <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
+                        <div className="flex items-center gap-4 mt-2 text-sm text-slate-500 flex-wrap">
                           <span className="flex items-center gap-1"><Heart className="w-4 h-4" />{post.likes}</span>
                           <span className="flex items-center gap-1"><MessageCircle className="w-4 h-4" />{post.comments.length}</span>
                           <span>By {post.author}</span>
                           <Link to={`/posts/${post.id}`}>
-                            <Button variant="ghost" size="sm" className="text-green-600 btn-sm bg-green-50 hover:bg-green-100 border-green-200">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-green-600 bg-green-50 hover:bg-green-100 border-green-200"
+                            >
                               View Post
                             </Button>
                           </Link>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => setReplyPost(post)} >
+
+                      <div className="flex sm:flex-col gap-2 sm:items-center">
+                        <Button variant="ghost" size="sm" onClick={() => setReplyPost(post)}>
                           <Reply className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleTogglePin(post.id)} className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleTogglePin(post.id)}
+                          className={post.isPinned ? 'text-blue-600' : 'text-slate-600'}
+                        >
                           <Pin className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-slate-600" onClick={() => navigate(`/admin/edit-post/${post.id}`)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-slate-600"
+                          onClick={() => navigate(`/admin/edit-post/${post.id}`)}
+                        >
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleDeletePost(post.id)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-600"
+                          onClick={() => handleDeletePost(post.id)}
+                        >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
