@@ -147,7 +147,7 @@ const BulletinBoard = () => {
   }, []);
 
   if (loading) {
-    return <p className="text-center text-slate-500 py-8">Loading posts...</p>;
+    return <div className='mt-[150px]'><p className="text-center py-10 font-large text-slate-500">Loading posts...</p></div>;
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">

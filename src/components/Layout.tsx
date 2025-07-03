@@ -79,6 +79,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/" className="text-gray-700 hover:text-orange-500 font-medium">Home</Link>
             <Link to="/about" className="text-gray-700 hover:text-orange-500 font-medium">About</Link>
             <Link to="/bulletin" className="text-gray-700 hover:text-orange-500 font-medium">Bulletin</Link>
+            <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium">Profile</Link>
 
             {isAuthenticated && hasAnyRole && (
               <Link
@@ -88,7 +89,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 Dashboard
               </Link>
             )}
-
             {isAuthenticated ? (
               <>
                 <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium flex items-center space-x-2">
@@ -121,12 +121,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {/* Mobile Nav */}
         {menuOpen && (
           <div className="md:hidden bg-white shadow-md px-6 pb-4 space-y-4">
-            <Link to="/" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link to="/about" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>About</Link>
-            <Link to="/bulletin" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>Bulletin</Link>
-
             {isAuthenticated && userName && (
-                <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium flex items-center space-x-2">
+              <Link to="/user/profile" className="text-gray-700 hover:text-orange-500 font-medium">
+                <div className="flex items-center space-x-2">
                   <img
                     // src={import.meta.env.VITE_API_BASE_URL+formData.preview}
                     src={userProfileImage}
@@ -134,9 +131,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     className="w-10 h-10 m-0 object-cover rounded-full border border-gray-300"
                   />
                   <div className="text-sm text-gray-500">{userName}</div>
-                </Link>
+                </div>
+              </Link>
             )}
-
+            <Link to="/" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/about" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>About</Link>
+            <Link to="/bulletin" className="block text-gray-700 font-medium hover:text-orange-500" onClick={() => setMenuOpen(false)}>Bulletin</Link>
             {isAuthenticated && hasAnyRole && (
               <Link
                 to="/dashboard"
@@ -146,7 +146,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 Dashboard
               </Link>
             )}
-
+            {isAuthenticated && userName && (
+              <Link to="/user/profile" className="block text-gray-700 font-medium hover:text-orange-500">Profile</Link>
+            )}
             {isAuthenticated ? (
               <button
                 onClick={() => {

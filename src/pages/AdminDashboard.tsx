@@ -187,7 +187,7 @@ export const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <p className="text-center py-10 text-slate-500">Loading posts...</p>;
+    return <div className='mt-[150px]'><p className="text-center py-10 font-large text-slate-500">Loading posts...</p></div>;
   }
 
   return (
