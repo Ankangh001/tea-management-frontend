@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { toast } from "@/components/ui/sonner";
 import API from "@/lib/api"; // <-- our axios wrapper
+import { Eye, EyeOff } from "lucide-react";
 
 const RegisterPage = () => {
   const [form, setForm] = useState({
@@ -14,6 +15,8 @@ const RegisterPage = () => {
     password_confirmation: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,8 +58,48 @@ const RegisterPage = () => {
           <form onSubmit={handleRegister} className="space-y-4">
             <Input name="name" placeholder="Full Name" onChange={handleChange} required />
             <Input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-            <Input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-            <Input name="password_confirmation" type="password" placeholder="Confirm Password" onChange={handleChange} required />
+            <div className="relative">
+              <Input 
+                name="password" 
+                type={showPassword ? "text" : "password"} 
+                placeholder="Password" 
+                onChange={handleChange} 
+                required 
+                className="pr-10"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                )}
+              </button>
+            </div>
+            <div className="relative">
+              <Input 
+                name="password_confirmation" 
+                type={showConfirmPassword ? "text" : "password"} 
+                placeholder="Confirm Password" 
+                onChange={handleChange} 
+                required 
+                className="pr-10"
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                )}
+              </button>
+            </div>
             <Button className="w-full" type="submit" disabled={loading}>
               {loading ? "Creating Account..." : "Register"}
             </Button>
