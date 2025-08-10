@@ -95,7 +95,7 @@ const LoginPage = () => {
             </Button>
           </form>
           <div className="pt-4 text-center text-sm text-slate-600">
-            Don’t have an account?{" "}
+            Don’t have an account ?{" "}
             <span
               className="text-blue-600 font-semibold cursor-pointer hover:underline"
               onClick={() => navigate("/register")}
