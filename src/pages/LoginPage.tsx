@@ -33,7 +33,7 @@ const LoginPage = () => {
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
       toast.success("Logged in successfully");
-      navigate("/dashboard");
+      navigate("/bulletin");
       
     } catch (err: any) {
       toast.error(

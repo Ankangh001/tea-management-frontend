@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MessageCircle, Plus } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { useNavigate } from "react-router-dom";
+import { hasRole } from "@/utils/auth";
 import API from "@/lib/api"; // Axios wrapper
 
 interface Message {
@@ -17,6 +20,7 @@ interface Message {
 }
 
 export const TeamMemberDashboard = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -37,9 +41,20 @@ export const TeamMemberDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6">
-          <h2 className="text-3xl font-bold mb-6 text-gradient bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
-            My Messages
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold mb-6 text-gradient bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+              My Messages
+            </h2>
+            {hasRole('team_editor') && (
+              <Button
+                onClick={() => navigate("/admin/create-post")}
+                className="flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+              >
+                <Plus className="w-4 h-4" />
+                Create Post
+              </Button>
+            )}
+          </div>
 
           {messages.length === 0 ? (
             <p className="text-gray-600">No messages received yet.</p>

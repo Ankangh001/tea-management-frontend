@@ -41,6 +41,16 @@ const UserManagement = () => {
     }
   };
 
+  const toggleEditorRole = async (userId: number) => {
+    try {
+      await api.post(`/api/users/${userId}/toggle-editor-role`);
+      fetchUsers();
+      toast.success("Editor role updated successfully");
+    } catch {
+      toast.error("Could not update editor role");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 mt-[80px]">
       <main className="container mx-auto px-4 py-8">
@@ -87,12 +97,21 @@ const UserManagement = () => {
                       </p>
                     </div>
                     {activeTab === 'users' && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm">Assign Team Member</span>
-                        <Switch
-                          checked={user.roles.some((r) => r.name === 'team_viewer')}
-                          onCheckedChange={() => toggleRole(user.id)}
-                        />
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">Assign Team Member</span>
+                          <Switch
+                            checked={user.roles.some((r) => r.name === 'team_viewer')}
+                            onCheckedChange={() => toggleRole(user.id)}
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">Allow Create Posts</span>
+                          <Switch
+                            checked={user.roles.some((r) => r.name === 'team_editor')}
+                            onCheckedChange={() => toggleEditorRole(user.id)}
+                          />
+                        </div>
                       </div>
                     )}
                   </div>

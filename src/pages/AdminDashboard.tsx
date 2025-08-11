@@ -9,6 +9,7 @@ import { toast } from '@/components/ui/sonner';
 import api from "@/lib/api";
 import { useNavigate, Link } from "react-router-dom";
 import { ReplyModal } from '../components/ReplyModal';
+import { hasRole, isAdmin } from '@/utils/auth';
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -220,18 +221,22 @@ export const AdminDashboard = () => {
               <p className="text-slate-600">Manage your bulletin board content</p>
             </div>
             <div className="flex flex-wrap justify-end gap-2 sm:flex-nowrap">
-              <Button
-                onClick={() => navigate("/admin/create-post")}
-                className="flex items-center gap-2 whitespace-nowrap"
-              >
-                <Plus className="w-4 h-4" />
-                Create Post
-              </Button>
-              <Link to="/admin/users" className="whitespace-nowrap">
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
-                  Manage Users
+              {(hasRole('team_editor') || isAdmin()) && (
+                <Button
+                  onClick={() => navigate("/admin/create-post")}
+                  className="flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Post
                 </Button>
-              </Link>
+              )}
+              {isAdmin() && (
+                <Link to="/admin/users" className="whitespace-nowrap">
+                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+                    Manage Users
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
 
