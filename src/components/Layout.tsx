@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { isLoggedIn, getCurrentUser } from "@/utils/auth";
+import api from "@/lib/api";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -17,6 +18,33 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     if (!user) return null;
     if (user.roles && user.roles.length > 0) return user.roles[0].name;
     return null;
+  };
+
+  // Check for role updates from server
+  const checkRoleUpdates = async () => {
+    if (!isLoggedIn()) return;
+    
+    try {
+      const response = await api.get('/api/user');
+      const serverUser = response.data;
+      const localUser = getCurrentUser();
+      
+      // Compare roles
+      const serverRoles = serverUser.roles || [];
+      const localRoles = localUser?.roles || [];
+      
+      const rolesChanged = JSON.stringify(serverRoles) !== JSON.stringify(localRoles);
+      
+      if (rolesChanged) {
+        // Update localStorage with new user data
+        localStorage.setItem('user', JSON.stringify(serverUser));
+        
+        // Trigger UI update
+        window.dispatchEvent(new Event('userUpdated'));
+      }
+    } catch (error) {
+      console.log('Failed to check role updates:', error);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +68,41 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkAuth();
+
+    // Listen for user data changes in localStorage
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'user') {
+        checkAuth();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Custom event for same-tab localStorage changes
+    const handleUserUpdate = () => {
+      checkAuth();
+    };
+    
+    window.addEventListener('userUpdated', handleUserUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userUpdated', handleUserUpdate);
+    };
   }, []);
+
+  // Periodic role check
+  useEffect(() => {
+    if (!isLoggedIn()) return;
+
+    // Check immediately
+    checkRoleUpdates();
+    
+    // Then check every 30 seconds
+    const interval = setInterval(checkRoleUpdates, 30000);
+    
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);

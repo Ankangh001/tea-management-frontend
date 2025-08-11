@@ -79,8 +79,8 @@ export default function UserProfile() {
 
       toast.success("Profile updated successfully!");
 
-      // ✅ 2. Reload the page (or better: refresh layout context)
-      window.location.reload(); // simple solution to force re-read user data
+      // ✅ 2. Dispatch custom event to update Layout
+      window.dispatchEvent(new Event('userUpdated'));
     } catch (err) {
       toast.error("Failed to update profile");
     }
